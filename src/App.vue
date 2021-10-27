@@ -1,34 +1,35 @@
 <template>
-  <div id="nav">
-    <Home />
-  </div>
+	<div id="nav">
+		<Home />
+	</div>
 </template>
 
 <script>
-import Home from './views/Home.vue'
+import Home from "./views/Home.vue";
 export default {
-  components:{
-    Home
-  }
-}
+	components: {
+		Home,
+	},
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+* {
+	margin: 0;
+	padding: 0;
 }
-
 #nav {
-  
+	height: 100%;
+	font-family: Avenir, Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-align: center;
+	color: #2c3e50;
+	background-color: rgb(218, 218, 218);
 }
 
 #nav a {
-  font-weight: bold;
-  color: #2c3e50;
+	font-weight: bold;
+	color: #2c3e50;
 }
-
 </style>
