@@ -1,7 +1,7 @@
 <template>
 	<div id="a-content">
-		<slot name="title" class="title"></slot>
-		<slot name="content" class="content"></slot>
+		<div class="title"><slot name="title"></slot></div>
+		<div class="content"><slot name="content"></slot></div>
 	</div>
 </template>
 
@@ -16,5 +16,19 @@ export default {
 
 <style scoped>
 #a-content {
+	height: calc(100vh - 100px);
+	background-color: #fff;
+}
+.title {
+	font-size: 28px;
+	color: rgb(120, 120, 120);
+	padding-top: 10px;
+	padding-bottom: 20px;
+}
+.content{
+	display: flex;
+	justify-content: center;
+	flex-direction: row;
+	flex-wrap: wrap;
 }
 </style>

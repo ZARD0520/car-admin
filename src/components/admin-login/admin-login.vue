@@ -2,20 +2,34 @@
 	<div id="head">
 		<img src="@/assets/icon/admin.svg" class="admin" />
 		<div class="login">
-			<a href="javascript:;"><span>登录</span></a>
+			<a href="javascript:;" @click="changeLogin"><span>登录</span></a>
 			or
 		</div>
 		<div class="register">
 			<a href="javascript:;"><span>&nbsp;注册</span></a>
 		</div>
+		<l-dialog />
 	</div>
 </template>
 
 <script>
-import { reactive } from "vue-demi";
+import { useStore } from "vuex";
+import lDialog from "./login-dialog.vue";
+
 export default {
+	components: {
+		lDialog,
+	},
 	setup() {
-		const app = reactive({});
+		const store = useStore();
+
+		//函数区
+		function changeLogin() {
+			store.commit("changeLogin", true);
+		}
+		return {
+			changeLogin,
+		};
 	},
 };
 </script>

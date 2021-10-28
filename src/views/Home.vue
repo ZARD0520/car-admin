@@ -4,12 +4,14 @@
 			<el-header>
 				<aHeader />
 			</el-header>
-			<el-aside>
-				<aMenu />
-			</el-aside>
-			<el-main>
-				<router-view/>
-			</el-main>
+			<el-container>
+				<el-aside>
+					<aMenu />
+				</el-aside>
+				<el-main>
+					<router-view />
+				</el-main>
+			</el-container>
 		</el-container>
 	</div>
 </template>
@@ -42,5 +44,10 @@ export default {
 .el-aside {
 	height: 100%;
 	margin-left: 20px;
+}
+.el-main {
+	margin: 0;
+	margin-right: 20px;
+	padding: 0;
 }
 </style>

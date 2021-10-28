@@ -23,20 +23,20 @@
 
 <script>
 import { reactive } from "vue-demi";
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 export default {
 	setup() {
-		const router = useRouter()
-		function jump(name){
-			if(name==='today'){
-				router.push('/today')
-			}else if(name==='history'){
-				router.push('/history')
-			}else if(name==='car'){
-				router.push('/car')
+		const router = useRouter();
+		function jump(name) {
+			if (name === "today") {
+				router.push("/today");
+			} else if (name === "history") {
+				router.push("/history");
+			} else if (name === "car") {
+				router.push("/car");
 			}
 		}
-		return { jump }
+		return { jump };
 	},
 };
 </script>
@@ -44,5 +44,8 @@ export default {
 <style scoped>
 #menu {
 	height: 100%;
+}
+.el-menu {
+	height: calc(100vh - 100px);
 }
 </style>
