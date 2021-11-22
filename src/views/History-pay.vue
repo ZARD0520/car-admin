@@ -32,12 +32,22 @@
 
 <script>
 import adminSlot from "@/components/admin-content/admin-content.vue";
-import { reactive } from "vue-demi";
+import {getHistory} from "@/network/car"
+import { onBeforeMount,reactive } from "vue-demi";
 export default {
 	components: {
 		adminSlot,
 	},
 	setup() {
+		onBeforeMount(async ()=>{
+			//请求历史缴费
+			try{
+				let historyPay = await getHistory();
+				console.log(historyPay);
+			}catch(e){
+				console.log(e);
+			}
+		})
 		const app = reactive({
 			historyList: [
 				{

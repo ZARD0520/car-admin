@@ -26,12 +26,22 @@
 
 <script>
 import adminSlot from "@/components/admin-content/admin-content.vue";
-import { reactive } from "vue-demi";
+import { getParking } from "@/network/car"
+import { onBeforeMount, reactive } from "vue-demi";
 export default {
 	components: {
 		adminSlot,
 	},
 	setup() {
+		onBeforeMount(async ()=>{
+			//请求停车场状态
+			try{
+				let parking = await getParking();
+				console.log(parking);
+			}catch(e){
+				console.log(e);
+			}
+		})
 		const app = reactive({
 			parkList: [
 				{

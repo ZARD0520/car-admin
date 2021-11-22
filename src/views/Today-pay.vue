@@ -25,12 +25,22 @@
 
 <script>
 import adminSlot from "@/components/admin-content/admin-content.vue";
-import { reactive } from "vue-demi";
+import {getToday} from "@/network/car"
+import { onBeforeMount,reactive } from "vue-demi";
 export default {
 	components: {
 		adminSlot,
 	},
 	setup() {
+		onBeforeMount(async ()=>{
+			//请求今日缴费
+			try{
+				let todayPay = await getToday();
+				console.log(todayPay);
+			}catch(e){
+				console.log(e);
+			}
+		})
 		const app = reactive({
 			payList: [
 				{
