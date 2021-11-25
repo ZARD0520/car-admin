@@ -3,19 +3,19 @@
 		<admin-slot>
 			<template #title>历史缴费流水账</template>
 			<template #content>
-				<el-table :data="app.historyList" style="width: 100%">
+				<el-table :data="historyList" style="width: 100%">
 					<el-table-column type="expand">
 						<template #default="props">
 							<el-timeline>
 								<el-timeline-item
-									v-for="(item, index) in props.row.carList"
+									v-for="(item, index) in props.row.contentList"
 									:key="index"
-									:timestamp="`缴费时间：` + item.time"
-									:type="item.type"
+									:timestamp="item.hasPay?(`缴费时间：` + item.time):'未缴费'"
+									:type="'primary'"
 								>
 									<el-card>
 										<h3 class="card-car">
-											车牌号：{{ item.car }}
+											车牌号：{{ item.carNum }}
 										</h3>
 										<p>收费：{{ item.price }}元</p>
 									</el-card>
@@ -23,7 +23,7 @@
 							</el-timeline>
 						</template>
 					</el-table-column>
-					<el-table-column label="日期" prop="date" />
+					<el-table-column label="日期" prop="time" />
 				</el-table>
 			</template>
 		</admin-slot>
@@ -33,60 +33,31 @@
 <script>
 import adminSlot from "@/components/admin-content/admin-content.vue";
 import {getHistory} from "@/network/car"
-import { onBeforeMount,reactive } from "vue-demi";
+import { onBeforeMount,reactive,ref } from "vue-demi";
 export default {
 	components: {
 		adminSlot,
 	},
 	setup() {
+		// 停车场状态对象
+		const historyList = ref([]);
+
 		onBeforeMount(async ()=>{
 			//请求历史缴费
 			try{
-				let historyPay = await getHistory();
-				console.log(historyPay);
+				const {data} = await getHistory();
+				data.data.forEach(item => {
+					var date = new Date(parseInt(item.date))
+					item.time = (date.getMonth()+1)+'月'+date.getDate()+'日';				
+				});
+				historyList.value = data.data;
+				console.log(data);
 			}catch(e){
 				console.log(e);
 			}
 		})
-		const app = reactive({
-			historyList: [
-				{
-					date: "2010-01-01",
-					carList: [
-						{
-							time: "10:00",
-							car: "粤A88888",
-							price: "9",
-							type: "primary",
-						},
-						{
-							time: "10:01",
-							car: "粤A66666",
-							price: "10",
-							type: "primary",
-						},
-					],
-				},
-				{
-					date: "2010-01-02",
-					carList: [
-						{
-							time: "09:00",
-							car: "粤A88888",
-							price: "8",
-							type: "primary",
-						},
-						{
-							time: "09:31",
-							car: "粤A66666",
-							price: "11",
-							type: "primary",
-						},
-					],
-				},
-			],
-		});
-		return { app };
+
+		return { historyList };
 	},
 };
 </script>
