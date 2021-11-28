@@ -6,19 +6,22 @@
 			or
 		</div>
 		<div class="register">
-			<a href="javascript:;"><span>&nbsp;注册</span></a>
+			<a href="javascript:;" @click="changeRegister"><span>&nbsp;注册</span></a>
 		</div>
 		<l-dialog />
+		<r-dialog />
 	</div>
 </template>
 
 <script>
 import { useStore } from "vuex";
 import lDialog from "./login-dialog.vue";
+import rDialog from "./register-dialog.vue"
 
 export default {
 	components: {
 		lDialog,
+		rDialog,
 	},
 	setup() {
 		const store = useStore();
@@ -27,8 +30,11 @@ export default {
 		function changeLogin() {
 			store.commit("changeLogin", true);
 		}
+		function changeRegister() {
+			store.commit("changeRegister",true);
+		}
 		return {
-			changeLogin,
+			changeLogin,changeRegister
 		};
 	},
 };

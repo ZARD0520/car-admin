@@ -9,10 +9,11 @@ export function getParking(){
 }
 
 //今日缴费
-export function getToday(){
+export function getToday(params:string){
     return request({
         url:'/getToday',
-        method:'post'
+        method:'post',
+        data:params
     })
 }
 

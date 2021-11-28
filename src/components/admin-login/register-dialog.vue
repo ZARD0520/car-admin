@@ -1,6 +1,13 @@
 <template>
-	<el-dialog v-model="loginVisible" title="登录" @close="back" width="400px">
+	<el-dialog v-model="registerVisible" title="注册" @close="back" width="400px">
 		<el-form :model="form">
+            <el-form-item label="手机号">
+                <el-input 
+                    v-model="form.phone"
+                    placeholder="请输入手机号"
+                    >
+                </el-input>
+            </el-form-item>
 			<el-form-item label="用户名">
 				<el-input
 					v-model="form.user"
@@ -18,7 +25,7 @@
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button @click="back">返回</el-button>
-				<el-button type="primary" @click="login">登录</el-button>
+				<el-button type="primary" @click="register">注册</el-button>
 			</span>
 		</template>
 	</el-dialog>
@@ -28,23 +35,24 @@
 import { useStore } from "vuex";
 import { toRefs, computed } from "vue";
 import { onBeforeMount,reactive } from "vue-demi";
-import { loginAdmin } from "../../network/login";
+import { registerAdmin } from "../../network/login";
 
 export default {
-	name: "loginDialog",
+	name: "registerDialog",
 	setup() {
 		const store = useStore();
-		const loginVisible = computed(() => store.state.loginDialog);
+		const registerVisible = computed(() => store.state.registerDialog);
 		const state = reactive({
 			form: {
+                phone:"",
 				user: "",
 				password: "",
 			},
 		});
-		//登录请求
-		onBeforeMount(async ()=>{
+        //注册请求
+        onBeforeMount(async ()=>{
 			try{
-				const data = await loginAdmin(state.form)
+				const data = await registerAdmin(state.form)
 				console.log(data);
 			}catch(e){
 				console.log(e);
@@ -53,13 +61,13 @@ export default {
 
 		//函数区
 		function back() {
-			store.commit("changeLogin", false);
+			store.commit("changeRegister", false);
 		}
-		function login() {
-			console.log(state);
-			//store.commit("changeLogin", false);
+		function register() {
+            const obj = state.form
+			console.log(obj);
 		}
-		return { ...toRefs(state), loginVisible, back, login };
+		return { ...toRefs(state), registerVisible, back, register };
 	},
 };
 </script>

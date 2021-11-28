@@ -6,13 +6,13 @@
 				<div class="pay-tree">
 					<el-timeline>
 						<el-timeline-item
-							v-for="(item, index) in app.payList"
+							v-for="(item, index) in todayList"
 							:key="index"
-							:timestamp="`缴费时间：` + item.timestamp"
+							:timestamp="!item.hasPay?(`未缴费`):(`缴费时间：${item.payTime}`)"
 							:type="item.type"
 						>
 							<el-card>
-								<h3 class="card-car">车牌号：{{ item.car }}</h3>
+								<h3 class="card-car">车牌号：{{ item.carNum }}</h3>
 								<p>收费：{{ item.price }}元</p>
 							</el-card>
 						</el-timeline-item>
@@ -26,38 +26,34 @@
 <script>
 import adminSlot from "@/components/admin-content/admin-content.vue";
 import {getToday} from "@/network/car"
-import { onBeforeMount,reactive } from "vue-demi";
+import { onBeforeMount,reactive,ref } from "vue-demi";
 export default {
 	components: {
 		adminSlot,
 	},
 	setup() {
+		// 今日数据对象
+		const todayList = ref({});
+
 		onBeforeMount(async ()=>{
 			//请求今日缴费
 			try{
-				let todayPay = await getToday();
-				console.log(todayPay);
+				let date = new Date()
+				let todayPay = await getToday({date:date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()});
+				//时间数据处理
+				todayPay.data.data[0].contentList.forEach(item => {
+					if(item.payTime){
+						let time = new Date(parseInt(item.payTime))
+						item.payTime = time.getHours()+':'+time.getMinutes()
+					}
+				});
+				todayList.value = todayPay.data.data[0].contentList;
+				console.log(todayList.value);
 			}catch(e){
 				console.log(e);
 			}
 		})
-		const app = reactive({
-			payList: [
-				{
-					car: "粤A66666",
-					price: "10",
-					timestamp: "13:00",
-					type: "primary",
-				},
-				{
-					car: "粤A66666",
-					price: "10",
-					timestamp: "13:00",
-					type: "primary",
-				},
-			],
-		});
-		return { app };
+		return { todayList };
 	},
 };
 </script>

@@ -10,7 +10,7 @@
 								<el-timeline-item
 									v-for="(item, index) in props.row.contentList"
 									:key="index"
-									:timestamp="item.hasPay?(`缴费时间：` + item.time):'未缴费'"
+									:timestamp="item.hasPay?(`缴费时间：` + item.payTime):'未缴费'"
 									:type="'primary'"
 								>
 									<el-card>
@@ -23,7 +23,7 @@
 							</el-timeline>
 						</template>
 					</el-table-column>
-					<el-table-column label="日期" prop="time" />
+					<el-table-column label="日期" prop="date" />
 				</el-table>
 			</template>
 		</admin-slot>
@@ -39,7 +39,7 @@ export default {
 		adminSlot,
 	},
 	setup() {
-		// 停车场状态对象
+		// 历史数据对象
 		const historyList = ref([]);
 
 		onBeforeMount(async ()=>{
@@ -47,9 +47,15 @@ export default {
 			try{
 				const {data} = await getHistory();
 				data.data.forEach(item => {
-					var date = new Date(parseInt(item.date))
-					item.time = (date.getMonth()+1)+'月'+date.getDate()+'日';				
+					item.contentList.forEach(cItem => {
+						if(cItem.payTime){
+							let date = new Date(parseInt(cItem.payTime))
+							cItem.payTime =  (date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()
+							console.log(cItem.payTime);
+						}
+					})
 				});
+				//赋值
 				historyList.value = data.data;
 				console.log(data);
 			}catch(e){
