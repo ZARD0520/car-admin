@@ -34,7 +34,7 @@
 <script>
 import { useStore } from "vuex";
 import { toRefs, computed } from "vue";
-import { onBeforeMount,reactive } from "vue-demi";
+import { reactive } from "vue-demi";
 import { registerAdmin } from "../../network/login";
 
 export default {
@@ -49,22 +49,26 @@ export default {
 				password: "",
 			},
 		});
-        //注册请求
-        onBeforeMount(async ()=>{
-			try{
-				const data = await registerAdmin(state.form)
-				console.log(data);
-			}catch(e){
-				console.log(e);
-			}
-		})
 
-		//函数区
+		//返回
 		function back() {
 			store.commit("changeRegister", false);
 		}
-		function register() {
+        //注册请求
+		async function register() {
             const obj = state.form
+            try{
+				const { data } = await registerAdmin(obj)
+				alert(data.message)
+			}catch(e){
+				console.log(e);
+			}
+            store.commit("changeRegister", false);
+            state.form = {
+                phone:"",
+				user: "",
+				password: "",
+            }
 			console.log(obj);
 		}
 		return { ...toRefs(state), registerVisible, back, register };

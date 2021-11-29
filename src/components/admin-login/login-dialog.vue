@@ -41,23 +41,24 @@ export default {
 				password: "",
 			},
 		});
-		//登录请求
-		onBeforeMount(async ()=>{
-			try{
-				const data = await loginAdmin(state.form)
-				console.log(data);
-			}catch(e){
-				console.log(e);
-			}
-		})
 
 		//函数区
 		function back() {
 			store.commit("changeLogin", false);
 		}
-		function login() {
-			console.log(state);
-			//store.commit("changeLogin", false);
+		async function login() {
+			try{
+				const {data} = await loginAdmin(state.form)
+				localStorage.setItem('token',data.token)
+				console.log(data);
+			}catch(e){
+				console.log(e);
+			}
+			store.commit("changeLogin", false);
+			state.form = {
+				user: "",
+				password: "",
+            }
 		}
 		return { ...toRefs(state), loginVisible, back, login };
 	},

@@ -3,7 +3,7 @@ import { request } from "./request"
 //注册
 export function registerAdmin(params:any){
     return request({
-        url:'/getParking',
+        url:'/registerAdmin',
         method:'post',
         data:params
     })
