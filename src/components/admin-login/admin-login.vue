@@ -1,12 +1,15 @@
 <template>
 	<div id="head">
 		<img src="@/assets/icon/admin.svg" class="admin" />
-		<div class="login">
+		<div v-if="status">{{adminName}}</div>
+		<div v-show="!status">
+			<div class="login">
 			<a href="javascript:;" @click="changeLogin"><span>登录</span></a>
 			or
-		</div>
-		<div class="register">
-			<a href="javascript:;" @click="changeRegister"><span>&nbsp;注册</span></a>
+			</div>
+			<div class="register">
+				<a href="javascript:;" @click="changeRegister"><span>&nbsp;注册</span></a>
+			</div>
 		</div>
 		<l-dialog />
 		<r-dialog />
@@ -15,6 +18,7 @@
 
 <script>
 import { useStore } from "vuex";
+import { ref,onBeforeMount } from "vue";
 import lDialog from "./login-dialog.vue";
 import rDialog from "./register-dialog.vue"
 
@@ -25,6 +29,14 @@ export default {
 	},
 	setup() {
 		const store = useStore();
+		const status = ref('');
+		const adminName = ref('');
+		
+		// 登录态和账号
+		onBeforeMount(()=>{
+			status.value = localStorage.getItem('token')
+			adminName.value = localStorage.getItem('user')
+		})
 
 		//函数区
 		function changeLogin() {
@@ -34,7 +46,7 @@ export default {
 			store.commit("changeRegister",true);
 		}
 		return {
-			changeLogin,changeRegister
+			changeLogin,changeRegister,status,adminName
 		};
 	},
 };

@@ -50,6 +50,7 @@ export default {
 			try{
 				const {data} = await loginAdmin(state.form)
 				localStorage.setItem('token',data.token)
+				localStorage.setItem('user',data.username)
 				console.log(data);
 			}catch(e){
 				console.log(e);
@@ -59,6 +60,7 @@ export default {
 				user: "",
 				password: "",
             }
+			location.reload()
 		}
 		return { ...toRefs(state), loginVisible, back, login };
 	},
