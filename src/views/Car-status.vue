@@ -50,6 +50,7 @@ export default {
 			//请求停车场状态
 			try{
 				const {data} = await getParking();
+				console.log(data);
 				parking.value = data.data
 				console.log(parking);
 			}catch(e){

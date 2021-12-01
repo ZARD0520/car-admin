@@ -5,7 +5,8 @@ export function registerAdmin(params:any){
     return request({
         url:'/registerAdmin',
         method:'post',
-        data:params
+        data:params,
+        super:1
     })
 }
 
@@ -14,6 +15,7 @@ export function loginAdmin(params:any){
     return request({
         url:'/loginAdmin',
         method:'post',
-        data:params
+        data:params,
+        super:1
     })
 }
