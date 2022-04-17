@@ -1,7 +1,13 @@
 <template>
 	<div id="car">
 		<admin-slot>
-			<template #title>社区车位情况</template>
+			<template #title>
+				社区车位情况
+				<div class="search">
+					<input type="text" placeholder="请输入停车位号码" v-model="parkNumber">
+					<button @click="search">搜索</button>
+				</div>
+			</template>
 			<template #content>
 				<div v-for="(item,index) in parking" :key="index">
 					<div>{{item.parklot}}号停车位</div>
@@ -26,7 +32,7 @@
 
 <script>
 import adminSlot from "@/components/admin-content/admin-content.vue";
-import { getParking } from "@/network/car"
+import { getParking,searchParking } from "@/network/car"
 import { computed, onBeforeMount, ref } from "vue-demi";
 export default {
 	components: {
@@ -35,30 +41,46 @@ export default {
 	setup() {
 		// 停车场状态对象
 		const parking = ref({})
+		// 停车场号码
+		const parkNumber = ref('')
 
 		const parkTime = computed(()=>{
 			var time = Date.now()
 			if(parking.value){
-				console.log(-(parseInt(parking.value[3].startTime)-time)/60000);
-				console.log(time);
 				return time
 			}
 		})
+
+		// 搜索
+		const search = async ()=>{
+			try{
+				const {data} = await searchParking({parklot:parkNumber.value})
+				if(!data.dataArr){
+					return alert('要搜索的车位不存在')
+				}
+				const arr = data.dataArr.filter((item)=>{
+					if(item!==undefined && item!==null){
+						return item
+					}
+				})
+				parking.value = arr
+			}catch(e){
+				console.log(e);
+			}
+		}
 
 		// 生命周期
 		onBeforeMount(async ()=>{
 			//请求停车场状态
 			try{
 				const {data} = await getParking();
-				console.log(data);
 				parking.value = data.data
-				console.log(parking);
 			}catch(e){
 				console.log(e);
 			}
 		})
 		
-		return { parking,parkTime };
+		return { parking,parkTime,parkNumber,search };
 	},
 
 };
@@ -88,5 +110,15 @@ export default {
 	color: rgb(0, 124, 128);
 	text-align: center;
 	margin-top:100px;
+}
+.search{
+	font-size: 24px;
+	text-align: right;
+	margin-right:30px;
+}
+.search > button {
+	margin-left:10px;
+	background-color: #fff;
+	color:rgb(0, 124, 128);
 }
 </style>

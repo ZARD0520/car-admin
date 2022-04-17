@@ -8,6 +8,15 @@ export function getParking(){
     })
 }
 
+//搜索停车场状态
+export function searchParking(params:string){
+    return request({
+        url:'/searchParking',
+        method:'post',
+        data:params,
+    })
+}
+
 //今日缴费
 export function getToday(params:string){
     return request({
